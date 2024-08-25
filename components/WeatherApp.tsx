@@ -121,11 +121,10 @@ export default function WeatherApp() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <div
-              className={`absolute max-sm:left-7 left-5 top-1/2 transform -translate-y-1/2 ${expanded ? "max-sm:flex" : "max-sm:hidden"}`}
-            >
-              <Search className="text-gray-400" size={24} />
-            </div>
+            {/*<div
+            //   className={`absolute max-sm:left-7 left-5 top-1/2 transform -translate-y-1/2 ${expanded ? "max-sm:flex" : "max-sm:hidden"}`}>
+            //   <Search className="text-gray-400" size={24} />
+            // </div>*/}
           </motion.div>
         </div>
         {filteredCities.length > 0 && (

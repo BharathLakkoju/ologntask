@@ -116,7 +116,7 @@ export default function WeatherCard({
             <WiWindy className="size-10 dark:text-zinc-200 text-zinc-900" />
             <span className="text-lg">Wind Speed</span>
           </div>
-          <span className="text-lg font-bold">{wind_speed} m/s</span>
+          <span className="text-lg font-bold">{wind_speed ? wind_speed : 0} m/s</span>
         </div>
         <div className="flex flex-col items-center justify-center w-[150px]">
           <div className="flex items-center gap-1">
