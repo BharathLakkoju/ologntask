@@ -122,7 +122,7 @@ export default function WeatherApp() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div
-              className={`absolute max-sm:left-14 lg:left-5 top-1/2 transform -translate-y-1/2 ${expanded ? "max-sm:flex" : "max-sm:hidden"}`}
+              className={`absolute max-sm:left-7 left-5 top-1/2 transform -translate-y-1/2 ${expanded ? "max-sm:flex" : "max-sm:hidden"}`}
             >
               <Search className="text-gray-400" size={24} />
             </div>
@@ -151,7 +151,7 @@ export default function WeatherApp() {
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: 1, y: expanded ? -50 : 0 }}
             transition={{ duration: 0.5 }}
-            className="mt-8 max-sm:w-[30rem] bg-transparent rounded-lg lg:max-w-2xl max-w-[28rem]"
+            className="max-sm:w-[30rem] bg-transparent rounded-lg lg:max-w-2xl max-w-[28rem]"
           >
             <WeatherCard weatherData={weatherData} />
           </motion.div>
