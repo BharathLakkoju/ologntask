@@ -11,13 +11,7 @@ import {
 import { SiRainmeter } from "react-icons/si";
 import { MdWaves } from "react-icons/md";
 import { motion } from "framer-motion";
-import {
-  ArrowBigRight,
-  ArrowRight,
-  MoveRight,
-  Snowflake,
-  Sun,
-} from "lucide-react";
+
 interface WeatherData {
   cityName: string;
   temperature: number;
@@ -47,11 +41,11 @@ export default function WeatherCard({
     <motion.div
       className={cn(
         "max-sm:w-[20rem] w-[28rem] lg:w-[42rem] lg:p-6 dark:text-white text-black rounded-xl",
-        "flex flex-col items-start space-y-8 max-sm:space-y-4 mx-auto",
+        "flex flex-col items-start space-y-8 max-sm:space-y-4 mx-auto"
       )}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0, scale: 0.9, y: -25 }}
+      animate={{ opacity: 1, scale: 1, y: -25 }}
+      transition={{ duration: 0.3 }}
     >
       <span className="max-sm:text-xl text-2xl lg:text-4xl font-bold">
         {cityName}
@@ -67,7 +61,7 @@ export default function WeatherCard({
                 "text-orange-500",
                 "text-4xl",
                 "p-0",
-                "animate-pulse",
+                "animate-pulse"
               )}
             />
           ) : temperature < 20 ? (
@@ -77,7 +71,7 @@ export default function WeatherCard({
                 "text-4xl",
                 "p-0",
                 "animate-pulse",
-                "spin-slow",
+                "spin-slow"
               )}
             />
           ) : (
@@ -97,21 +91,21 @@ export default function WeatherCard({
           </div>
           <span className="text-xl font-semibold">{humidity} %</span>
         </div>
-        <div className="flex flex-col items-center justify-center max-sm:w-[130px] w-[150px]">
+        <div className="flex flex-col items-center justify-center w-[150px]">
           <div className="flex items-center gap-1">
             <SiRainmeter className="size-6 text-blue-500" />
             <span className="text-lg">Rain Intensity</span>
           </div>
           <span className="text-lg font-bold">{rain_intensity} mm/min</span>
         </div>
-        <div className="flex flex-col items-center justify-center max-sm:w-[175px] w-[200px]">
+        <div className="flex flex-col items-center justify-center w-[200px]">
           <div className="flex items-center gap-1">
             <WiRain className="size-8 dark:text-cyan-400 text-cyan-600" />
             <span className="text-lg">Rain Accumulation</span>
           </div>
           <span className="text-lg font-bold">{rain_accumulation} mm</span>
         </div>
-        <div className="flex flex-col items-center justify-center w-[150px] max-sm:w-[130px]">
+        <div className="flex flex-col items-center justify-center w-[150px]">
           <div className="flex items-center gap-1">
             <WiWindy className="size-10 dark:text-zinc-200 text-zinc-900" />
             <span className="text-lg">Wind Speed</span>
@@ -120,7 +114,7 @@ export default function WeatherCard({
             {wind_speed ? wind_speed : 0} m/s
           </span>
         </div>
-        <div className="flex flex-col items-center justify-center max-sm:w-[150px] w-[200px]">
+        <div className="flex flex-col items-center justify-center max-sm:w-[170px] w-[200px]">
           <div className="flex items-center gap-1">
             <WiStrongWind
               className={`size-8 dark:text-zinc-400 text-gray-400`}

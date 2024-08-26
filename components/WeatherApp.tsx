@@ -32,7 +32,7 @@ export default function WeatherApp() {
   useEffect(() => {
     if (searchTerm) {
       const filtered = data.filter((city) =>
-        city.localCityName.toLowerCase().includes(searchTerm.toLowerCase()),
+        city.localCityName.toLowerCase().includes(searchTerm.toLowerCase())
       );
       dispatch(setFilteredCities(filtered.slice(0, 5)));
     } else {
