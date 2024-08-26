@@ -1,87 +1,56 @@
 "use client";
+
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import data from "../data/myData.json";
-import axios from "axios";
-import { Search } from "lucide-react";
 import GradientText from "./GradientText";
 import WeatherCard from "./WeatherDisplay";
-
-interface City {
-  id: string;
-  cityName: string;
-  localityName: string;
-  localCityName: string;
-}
-
-interface WeatherData {
-  cityName: string;
-  temperature: number;
-  humidity: number;
-  wind_speed: number;
-  wind_direction: number;
-  rain_intensity: number;
-  rain_accumulation: number;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import {
+  setSearchTerm,
+  setFilteredCities,
+  setSelectedCity,
+  setExpanded,
+  clearWeatherData,
+  fetchWeatherData,
+} from "@/store/WeatherSlice";
 
 export default function WeatherApp() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCities, setFilteredCities] = useState<City[]>([]);
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [expanded, setExpanded] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const {
+    searchTerm,
+    filteredCities,
+    selectedCity,
+    weatherData,
+    error,
+    expanded,
+  } = useSelector((state: RootState) => state.weather);
 
   useEffect(() => {
     if (searchTerm) {
       const filtered = data.filter((city) =>
-        city.localCityName.toLowerCase().includes(searchTerm.toLowerCase())
+        city.localCityName.toLowerCase().includes(searchTerm.toLowerCase()),
       );
-      setFilteredCities(filtered.slice(0, 5));
+      dispatch(setFilteredCities(filtered.slice(0, 5)));
     } else {
-      setFilteredCities([]);
+      dispatch(setFilteredCities([]));
     }
-  }, [searchTerm, data]);
+  }, [searchTerm, dispatch]);
 
   const getLocalityId = (city: string) => {
     const cityData = data.find((cityn) => cityn.localCityName === city);
     return cityData ? cityData.localityId : null;
   };
 
-  const fetchWeatherData = async (locality_id: string, city: string) => {
-    try {
-      const response = await axios.request({
-        method: "GET",
-        url: "https://www.weatherunion.com/gw/weather/external/v0/get_locality_weather_data",
-        headers: { "X-Zomato-Api-Key": "d54a37e2fc5a8eb91a74c2dae9bb6003" },
-        params: {
-          locality_id: locality_id,
-        },
-      });
-      if (response.data.locality_weather_data.temperature === null) {
-        setError("No weather data available for this city currently.");
-      } else {
-        const weatherData: WeatherData = {
-          ...response.data.locality_weather_data,
-          cityName: city,
-        };
-        console.log(weatherData);
-        setWeatherData(weatherData);
-        setError("");
-      }
-    } catch (error) {
-      setError("An error occurred while fetching weather data.");
-    }
-  };
-
   const handleCitySelect = (city: string) => {
-    setSelectedCity(city);
-    setSearchTerm("");
+    dispatch(setSelectedCity(city));
+    dispatch(setSearchTerm(""));
     const localityId = getLocalityId(city);
     if (localityId) {
-      fetchWeatherData(localityId, city);
+      dispatch(fetchWeatherData({ locality_id: localityId, city }));
     }
   };
 
@@ -112,23 +81,19 @@ export default function WeatherApp() {
               y: expanded ? -50 : 0,
             }}
             className="relative flex items-center justify-center"
-            onClick={() => setExpanded(true)}
+            onClick={() => dispatch(setExpanded(true))}
           >
             <Input
               type="text"
               placeholder="Search for a city..."
-              className="lg:min-w-2xl pl-14 py-10 lg:pl-16 lg:pr-10 lg:py-10 rounded-[999px] max-sm:w-[400px] border border-gray-800 dark:border-gray-700 focus-within:outline-none focus:outline-none focus:border-0 text-lg dark:bg-zinc-800 dark:text-white"
+              className="lg:min-w-2xl pl-14 py-10 lg:pl-14 lg:pr-10 lg:py-10 rounded-[999px] max-sm:w-[400px] border border-gray-800 dark:border-gray-700 focus-within:outline-none focus:outline-none focus:border-0 text-lg dark:bg-zinc-800 dark:text-white"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => dispatch(setSearchTerm(e.target.value))}
             />
-            {/*<div
-            //   className={`absolute max-sm:left-7 left-5 top-1/2 transform -translate-y-1/2 ${expanded ? "max-sm:flex" : "max-sm:hidden"}`}>
-            //   <Search className="text-gray-400" size={24} />
-            // </div>*/}
           </motion.div>
         </div>
         {filteredCities.length > 0 && (
-          <div className="bg-zinc-100 dark:bg-zinc-800 rounded-xl shadow overflow-y-auto max-h-64 fixed top-1/2 left-1/2 -translate-x-1/2 transform -translate-y-[180px] lg:-translate-y-[300px] w-[300px] lg:w-[550px] z-10">
+          <div className="bg-zinc-100 dark:bg-zinc-800 rounded-xl w-[600px] max-sm:w-[350px] shadow-xl overflow-y-auto max-h-64 fixed top-[18rem] sm:top-[19rem] lg:top-[14rem] left-1/2 -translate-x-1/2 z-10">
             {filteredCities.map((city) => (
               <div
                 key={city.id}
@@ -144,13 +109,12 @@ export default function WeatherApp() {
       {expanded &&
         selectedCity &&
         weatherData &&
-        getLocalityId(selectedCity as string) ==
-          getLocalityId(weatherData.cityName) && (
+        getLocalityId(selectedCity) === getLocalityId(weatherData.cityName) && (
           <motion.div
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: 1, y: expanded ? -50 : 0 }}
             transition={{ duration: 0.5 }}
-            className="max-sm:w-[30rem] bg-transparent rounded-lg lg:max-w-2xl max-w-[28rem]"
+            className="max-sm:w-[20rem] bg-transparent rounded-lg lg:max-w-2xl max-w-[28rem]"
           >
             <WeatherCard weatherData={weatherData} />
           </motion.div>

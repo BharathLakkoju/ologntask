@@ -1,10 +1,14 @@
+"use client"
 import WeatherApp from "@/components/WeatherApp";
-import Image from "next/image";
+import { Provider } from "react-redux";
+import { store } from "@/store";
 
 export default function Home() {
   return (
     <>
-      <WeatherApp />
+      <Provider store={store}>
+        <WeatherApp />
+      </Provider>
     </>
   );
 }

@@ -104,7 +104,7 @@ export default function WeatherCard({
           </div>
           <span className="text-lg font-bold">{rain_intensity} mm/min</span>
         </div>
-        <div className="flex flex-col items-center justify-center w-[175px]">
+        <div className="flex flex-col items-center justify-center max-sm:w-[175px] w-[200px]">
           <div className="flex items-center gap-1">
             <WiRain className="size-8 dark:text-cyan-400 text-cyan-600" />
             <span className="text-lg">Rain Accumulation</span>
@@ -116,9 +116,11 @@ export default function WeatherCard({
             <WiWindy className="size-10 dark:text-zinc-200 text-zinc-900" />
             <span className="text-lg">Wind Speed</span>
           </div>
-          <span className="text-lg font-bold">{wind_speed ? wind_speed : 0} m/s</span>
+          <span className="text-lg font-bold">
+            {wind_speed ? wind_speed : 0} m/s
+          </span>
         </div>
-        <div className="flex flex-col items-center justify-center w-[150px]">
+        <div className="flex flex-col items-center justify-center max-sm:w-[150px] w-[200px]">
           <div className="flex items-center gap-1">
             <WiStrongWind
               className={`size-8 dark:text-zinc-400 text-gray-400`}

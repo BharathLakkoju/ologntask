@@ -23,8 +23,7 @@ export default function RootLayout({
         <SpotLightProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="dark"
             disableTransitionOnChange
           >
             <ModeToggle />
